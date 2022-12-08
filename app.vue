@@ -2,13 +2,19 @@
 </script>
 
 <template>
-  <div>
+  <main class="main">
     <p>The app</p>
-  </div>
+  </main>
 </template>
 
 <style lang="scss">
   body {
     font-family: 'Stolzl', sans-serif;
+    display: grid;
+    justify-content: center;
+    align-content: center;
   }
+  .main {
+		padding: 3rem;
+	}
 </style>

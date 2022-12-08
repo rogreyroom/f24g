@@ -10,8 +10,7 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          reset: '@use "@/assets/style/_reset.scss" as reset;',
-          fonts: '@use "@/assets/style/_fonts.scss" as fonts;'
+          additionalData: '@use "@/assets/style/global.scss" as *;',
         }
       }
     }
