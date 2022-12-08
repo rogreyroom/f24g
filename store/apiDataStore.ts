@@ -12,8 +12,9 @@ export const useApiStore = defineStore('api', () => {
 		try {
 			const riversRes: Slide[] = await $fetch('https://api.nuxtjs.dev/rivers')
 			const planetsRes: Slide[] = await $fetch('https://api.nuxtjs.dev/planets')
+			const mountainsRes: Slide[] = await $fetch('https://api.nuxtjs.dev/mountains')
 
-			apiData.value = [...riversRes, ...planetsRes]
+			apiData.value = [...riversRes, ...planetsRes, ...mountainsRes].splice(0, 20)
 		} catch (err) {
 			return err
 		}
