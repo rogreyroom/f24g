@@ -37,7 +37,7 @@
     }
 
     h1 {
-      color: yellowgreen;
+      color: var(--primary-color);
     }
 	}
 </style>

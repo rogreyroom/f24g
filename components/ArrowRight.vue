@@ -10,7 +10,7 @@
   svg {
     transform: rotate(-180deg);
     path {
-      stroke: greenyellow;
+      stroke: var(--primary-color);
     }
   }
 </style>

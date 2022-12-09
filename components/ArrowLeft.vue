@@ -8,6 +8,6 @@
 
 <style lang="scss" scoped>
     svg path {
-      stroke: greenyellow;
+      stroke: var(--primary-color);
     }
 </style>

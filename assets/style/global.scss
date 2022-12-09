@@ -1,2 +1,7 @@
 @use './reset';
 @use './fonts';
+
+* {
+  --primary-color: RGB(77, 172, 119);
+  --grey-light: RGB(217, 230, 252);
+}
