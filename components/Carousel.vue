@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { useSlidesStore } from '@/store/slidersStore';
-	import { useDebounceFn, useLocalStorage, useSwipe } from '@vueuse/core'
+	import { SwipeDirection, useDebounceFn, useLocalStorage, useSwipe } from '@vueuse/core'
 	import { storeToRefs } from 'pinia';
 
 	const slidersStore = useSlidesStore()
@@ -12,7 +12,12 @@
     return `${num}`
   }
   const imageSwipe = ref<HTMLElement | null>(null)
-  const { direction } = useSwipe(imageSwipe)
+  useSwipe(imageSwipe, {
+    onSwipeEnd(e: TouchEvent, direction: SwipeDirection) {
+      if (direction === 'LEFT') nextSlide()
+      if (direction === 'RIGHT') prevSlide()
+    },
+  })
 
   currentSlide.value = useLocalStorage('f24gCurrSlide', 0).value
   useSlidersAction()
@@ -23,19 +28,13 @@
     useSlidersAction()
 		localStorage.setItem('f24gCurrSlide', `${currentSlide.value}`)
 	})
-
-  watch(direction, () => {
-    if (direction.value === 'LEFT') nextSlide()
-    if (direction.value === 'RIGHT') prevSlide()
-  })
-
 </script>
 
 <template>
   <section class="carousel">
 		<p v-if="(getSlidersLength === 0)" class="carousel__loader">Loading....</p>
-		<div v-else class="carousel__container">
-      <ul class="sliders" ref="imageSwipe">
+		<div v-else class="carousel__container" ref="imageSwipe">
+      <ul class="sliders">
 				<li v-for="(slide, index) in sliders" :key="index" class="sliders__slide">
 					<img :src="slide.image" :alt="slide.title" class="sliders__image" />
 				</li>
@@ -48,7 +47,7 @@
 			</nav>
 			<div class="navbar__info">
 				<p class="navbar__text">
-          {{ formatNumberToString((currentSlide +1)) }}
+          {{ formatNumberToString((getSlidersLength === 0 ? 0 : currentSlide +1)) }}
           <span class="navbar__text--grey">/ {{ formatNumberToString(getSlidersLength) }}</span>
         </p>
 			</div>
