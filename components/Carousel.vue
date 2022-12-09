@@ -11,6 +11,8 @@
     if (num < 10) return `0${num}`
     return `${num}`
   }
+  const imageSwipe = ref<HTMLElement | null>(null)
+  const { direction } = useSwipe(imageSwipe)
 
   currentSlide.value = useLocalStorage('f24gCurrSlide', 0).value
   useSlidersAction()
@@ -22,13 +24,18 @@
 		localStorage.setItem('f24gCurrSlide', `${currentSlide.value}`)
 	})
 
+  watch(direction, () => {
+    if (direction.value === 'LEFT') nextSlide()
+    if (direction.value === 'RIGHT') prevSlide()
+  })
+
 </script>
 
 <template>
   <section class="carousel">
 		<p v-if="(getSlidersLength === 0)" class="carousel__loader">Loading....</p>
 		<div v-else class="carousel__container">
-      <ul class="sliders" >
+      <ul class="sliders" ref="imageSwipe">
 				<li v-for="(slide, index) in sliders" :key="index" class="sliders__slide">
 					<img :src="slide.image" :alt="slide.title" class="sliders__image" />
 				</li>
@@ -40,7 +47,10 @@
         <button class="nav__btn" @click="nextSlide"><ArrowRight /></button>
 			</nav>
 			<div class="navbar__info">
-				<p class="navbar__text">{{ formatNumberToString((currentSlide +1)) }} / {{ formatNumberToString(getSlidersLength) }}</p>
+				<p class="navbar__text">
+          {{ formatNumberToString((currentSlide +1)) }}
+          <span class="navbar__text--grey">/ {{ formatNumberToString(getSlidersLength) }}</span>
+        </p>
 			</div>
 		</div>
 	</section>
@@ -65,7 +75,7 @@
 
 		&__loader {
       font-size: 1.5rem;
-      color: yellowgreen;
+      color: var(--primary-color);
 
       @media screen and (min-width: 30em) {
         font-size: 3rem;
@@ -73,7 +83,8 @@
     }
 
 		&__container {
-			overflow: hidden;
+      overflow: hidden;
+      will-change: transform;
       border-radius: 1rem;
       width: 100%;
       height: 100%;
@@ -110,7 +121,11 @@
     &__text {
       font-size: 1rem;
       font-weight: bold;
-      color: yellowgreen;
+      color: var(--primary-color);
+
+      &--grey {
+        color: var(--grey-light)
+      }
     }
 	}
 
